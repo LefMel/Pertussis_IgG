@@ -1,4 +1,4 @@
-# Pertussis_IgG
+# Pertussis_IgG - Public repo
 Code (JAGS, Rscript) for the Bayesian mixture latent class model on IgG Pertussis diagnosis
 
 JAGS code  
