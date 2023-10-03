@@ -10,5 +10,10 @@ JAGS code
 --- normal_model_no_cov - No covariates included (uniform(0,1) prior distribution placed on prevalence)  
 
 
-Rscipt
+Rscipt  
+
 --- code to load data, run JAGS code and generate graphs
+
+Figures  
+
+--- Generated figures to be added in the report
