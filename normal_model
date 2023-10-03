@@ -1,0 +1,82 @@
+# Model specification
+model {
+  
+  for (i in 1:N){
+    
+
+    Test[i] ~ dnorm(mu[i], tau[i])
+    
+
+    mu[i] <- lambda[T[i]]
+    
+    tau[i] <- gamma[T[i]]
+    
+    
+    # T[i] True infectious status - Latent
+    
+     #T[i] ~ dcat(P[])
+     
+      logit(P[i]) <- alpha*Age[i] + beta[Gender[i]] + U[Region[i]]
+     #logit(P[i]) <- beta[Gender[i]] + U[Region[i]]
+     
+     Z[i] ~ dbern(P[i])
+     
+     T[i] <- Z[i] + 1
+     
+     
+  }
+     #P[1:2] ~ ddirch(alpha[])
+    
+
+  lambda[1] ~ dnorm(0,0.001)
+  lambda[2] ~ dnorm(0,0.001)I(lambda[1],)
+  
+  # Prior for variances of normal distribution
+  gamma[1] ~ dgamma(0.001, 0.01)
+  gamma[2] ~ dgamma(0.001, 0.01)
+  
+
+  sigma[1] <- 1/gamma[1]
+  sigma[2] <- 1/gamma[2]
+  
+  
+  # Prior for covariates
+  alpha ~ dnorm(0, 0.001)
+  
+  for (i in 1:2){
+  beta[i] ~ dnorm(0, 0.001)
+  }
+  
+  for (i in 1:8){
+  U[i] ~ dnorm(0, ivar)
+  }
+  
+  ivar <- 1/sqrt(random_sd)
+  random_sd ~ dunif(0,1)
+  
+  
+  
+  AUC <- phi(-(lambda[1] - lambda[2])/sqrt(sigma[1] + sigma[2]))
+
+
+
+  delta <- phi((1.645-lambda[2])/sqrt(sigma[2]))
+
+  for(i in 1:300) {
+      c1[i] <- ((1.46+0.42*i)-lambda[2])/sqrt(sigma[2])
+
+      se[i] <- 1-phi(c1[i])
+      
+      c2[i] <- ((1.46+0.42*i)-lambda[1])/sqrt(sigma[1])
+      sp[i] <- phi(c2[i])
+      
+      J[i] <- se[i] + sp[i] - 1
+
+      
+  }
+  
+  # Initial Values
+  # list(lambda1=c(,),lambda2=c(,),gamma1=c(,),gamma2=c(,),rho=c(,))
+  
+}
+
