@@ -15,7 +15,7 @@ names <- c("Age", "Gender", "Region", "Test")
 colnames(data) <- names
 
 unique(data$Gender)
-data$Gender <- ifelse(data$Gender=="амдяас", "Male", "Female")
+data$Gender <- ifelse(data$Gender=="ц│ц█ц└ц▒ц│ц⌠", "Male", "Female")
 unique(data$Gender)
 data$Test <- as.numeric(data$Test)
 
@@ -28,27 +28,27 @@ library(dplyr)
 
 data <- data %>%
   mutate(Region_c = recode(Region,
-                           "лацмгсиа" = "Thessaly",
-                           "каяиса" = "Thessaly",
-                           "йаядитса" = "Thessaly",
-                           "йояимхиа" = "Peloponnisos",
-                           "лессгмиа" = "Peloponnisos",
-                           "кайымиас" = "Peloponnisos",
-                           "аяйадиас" = "Peloponnisos",
-                           "аяцокида" = "Peloponnisos",
-                           "патяа" = "Peloponnisos",
-                           "аматокийг лайедомиа" = "Macedonia",
-                           "йемтя.лайедомиа" = "Macedonia",
-                           "дутийг лайедомиа " = "Macedonia",
-                           "д лайедомиа киапгс" = "Macedonia",
-                           "д лайедомиа доуцйас" = "Macedonia",
-                           "д лайедомиа сжетсос" = "Macedonia",
-                           "стеяеа еккада" = "St. Ellada",
-                           "йягтг" = "Crete",
-                           "бояеио аицаио " = "Aegean",
-                           "иомиа мгсиа" = "Ionian",
-                           "гпеияос" = "Epirus",
-                           "аттийг" = "St. Ellada",
+                           "ц▄ц│ц┐ц█ц┤ц⌠ц┴ц│" = "Thessaly",
+                           "ц▀ц│ц▒ц┴ц⌠ц│" = "Thessaly",
+                           "ц┼ц│ц▒ц└ц┴ц■ц⌠ц│" = "Thessaly",
+                           "ц┼ц▐ц▒ц┴ц█ц┬ц┴ц│" = "Peloponnisos",
+                           "ц▄ц┘ц⌠ц⌠ц┤ц█ц┴ц│" = "Peloponnisos",
+                           "ц▀ц│ц┼ц≥ц█ц┴ц│ц⌠" = "Peloponnisos",
+                           "ц│ц▒ц┼ц│ц└ц┴ц│ц⌠" = "Peloponnisos",
+                           "ц│ц▒ц┐ц▐ц▀ц┴ц└ц│" = "Peloponnisos",
+                           "ц░ц│ц■ц▒ц│" = "Peloponnisos",
+                           "ц│ц█ц│ц■ц▐ц▀ц┴ц┼ц┤ ц▄ц│ц┼ц┘ц└ц▐ц█ц┴ц│" = "Macedonia",
+                           "ц┼ц┘ц█ц■ц▒.ц▄ц│ц┼ц┘ц└ц▐ц█ц┴ц│" = "Macedonia",
+                           "ц└ц∙ц■ц┴ц┼ц┤ ц▄ц│ц┼ц┘ц└ц▐ц█ц┴ц│ " = "Macedonia",
+                           "ц└ ц▄ц│ц┼ц┘ц└ц▐ц█ц┴ц│ ц▀ц┴ц│ц░ц┤ц⌠" = "Macedonia",
+                           "ц└ ц▄ц│ц┼ц┘ц└ц▐ц█ц┴ц│ ц└ц▐ц∙ц┐ц┼ц│ц⌠" = "Macedonia",
+                           "ц└ ц▄ц│ц┼ц┘ц└ц▐ц█ц┴ц│ ц⌠ц√ц┘ц■ц⌠ц▐ц⌠" = "Macedonia",
+                           "ц⌠ц■ц┘ц▒ц┘ц│ ц┘ц▀ц▀ц│ц└ц│" = "St. Ellada",
+                           "ц┼ц▒ц┤ц■ц┤" = "Crete",
+                           "ц┌ц▐ц▒ц┘ц┴ц▐ ц│ц┴ц┐ц│ц┴ц▐ " = "Aegean",
+                           "ц┴ц▐ц█ц┴ц│ ц█ц┤ц⌠ц┴ц│" = "Ionian",
+                           "ц┤ц░ц┘ц┴ц▒ц▐ц⌠" = "Epirus",
+                           "ц│ц■ц■ц┴ц┼ц┤" = "St. Ellada",
                            ))
 
 data[is.na(data$Region_c),]$Region_c = "Thessaly"
@@ -91,7 +91,7 @@ ggplot(data, aes(x=Age, y=Test)) +
 ### Main Bayesian Mixture model
 #################################
 library(runjags)
-runjags.options(force.summary=FALSE)
+runjags.options(force.summary=TRUE)
 results <- run.jags("normal_model", 
                     monitor=c("AUC", "delta", "lambda", "sigma", "delta", "se", "sp", "alpha", "beta", "U", "random_sd", "J"),
                     data=list(Test = data$Test,
@@ -99,9 +99,7 @@ results <- run.jags("normal_model",
                     n.chains=2)
 
 
-results_add = add.summary(results)
-
-posterior <- as.data.frame(summary(results_add))
+posterior <- as.data.frame(summary(results))
 str(posterior)
 posterior$index = rownames(posterior)
 
@@ -208,9 +206,7 @@ results <- run.jags("normal_model_age_rm",
                     n.chains=2)
 
 
-results_add = add.summary(results)
-
-posterior_age <- as.data.frame(summary(results_add))
+posterior_age <- as.data.frame(summary(results))
 str(posterior_age)
 posterior_age$index = rownames(posterior_age)
 
@@ -264,16 +260,14 @@ confint(model)
 # No covariates
 ######################
 library(runjags)
-runjags.options(force.summary=FALSE)
+runjags.options(force.summary=TRUE)
 results <- run.jags("normal_model_no_cov", 
                     monitor=c("AUC", "delta", "lambda", "sigma", "P", "delta", "se", "sp", "J"),
                     data=list(Test = data$Test,
                               N=length(data$Test), alpha=c(1,1)),
                     n.chains=2)
 
-results_add = add.summary(results)
-
-posterior_no_cov = as.data.frame(summary(results_add))
+posterior_no_cov = as.data.frame(summary(results))
 posterior_no_cov$index = rownames(posterior_no_cov)
 View(round(posterior_no_cov[,1:3],4))
 
@@ -300,130 +294,6 @@ posterior_no_cov["sp[38",]
 ##############################################
 ## Covariates both on infection + test
 ##############################################
-
-##############################################
-# Garbage code
-##############################################
-a <- log(as.numeric(draft$`Pertussis.IgG.(U/ml)`))
-
-a <- na.omit(a)
-b <- kmeans(c, centers = 3, iter.max = 1000)
-
-plot(density(as.numeric(draft$`Pertussis.IgG.(U/ml)`), na.rm=TRUE))
-
-print(b)
-
-print(b$cluster)
-# Print the cluster assignment
-print(kmeans_result$cluster)
-
-
-
-
-# Load ggplot2 for data visualization
-library(ggplot2)
-
-# Create a scatter plot of the clusters
-ggplot(data.frame(c), aes(x = exp(c), y=runif(length(c)), color = as.factor(b$cluster))) +
-  geom_point() +
-  labs(color = "Cluster") +
-  theme_minimal()
-
-# Load the dataset
-data(iris)
-
-# Inspect the first few rows of the dataset
-head(iris)
-
-
-
-# Set a seed for reproducibility
-set.seed(123)
-
-# Run K-means clustering
-kmeans_result <- kmeans(iris[,1:4], centers = 3)
-
-# Print the result
-print(kmeans_result)
-
-# Print the cluster assignment
-print(kmeans_result$cluster)
-
-c = sample(a, size=100, replace=FALSE)
-# Load ggplot2 for data visualization
-library(ggplot2)
-
-# Create a scatter plot of the clusters
-ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = as.factor(kmeans_result$cluster))) +
-  geom_point() +
-  labs(color = "Cluster") +
-  theme_minimal()
-
-hist(draft$`ELISA.S/P`, breaks=20)
-which.max(draft$`ELISA.S/P`)
-min(draft$`ELISA.S/P`)
-
-data = draft[-581,]
-hist(data$`ELISA.S/P`, breaks=20)
-hist(data$FPA.titer.DeltamP, breaks=20)
-
-plot(density(data$`ELISA.S/P`))
-plot(density(data$FPA.titer.DeltamP))
-range(data$`ELISA.S/P`)
-# -7.7 213
-# (213 + 7.7)/300 - step 0.75
-
-range(data$FPA.titer.DeltamP)
-# -9.45 207
-# (207 + 9.45)/300 - step 0.72
-setwd("C:/Users/LefMel/Documents/Xhelil Koleci Brucellosis")
-library(runjags)
-results <- run.jags("normal_model", 
-                    monitor=c("AUC1", "AUC2", "delta1", "delta2", "lambda1", "lambda2", "sigma1", "sigma2", "P", "rho", "delta1", "delta2", "se1", "se2", "sp1", "sp2", "J1", "J2"),
-                    data=list(ELISA = data$`ELISA.S/P`, FPA = data$FPA.titer.DeltamP, alpha=c(1,1),
-                              N=length(data$`ELISA.S/P`)),
-                    n.chains=2)
-
-# rho[1] <- 0
-summary(results)
-save(results, file="results")
-load("results")
-pt <- plot(results)
-#results
-res_add <- add.summary(results)
-summary(res_add)
-View(summary(res_add))
-save(res_add, file="results_full")
-load("results_full")
-
-View(summary(res_add))
-round(summary(res_add)[5:8,1:3],2)
-sqrt(round(summary(res_add)[9:12,1:3],2))
-
-
-round(sqrt(summary(res_add)[9:12,1:3]),2)
-
-a <- summary(res_add)
-
-save(a, file="results_full_sum")
-load("results_full_sum")
-
-# J1
-J1 <- (summary(res_add)[1217:1516,])
-View(J1)
-J1[,2]
-(J1[,2]-1)
-curve(dnorm(x,2.49, sqrt(27)), from=c(-50,0), to=c(1000,0.2))
-curve(dnorm(x,118, sqrt(2874)), from=c(-5,0), to=c(1000,0.2), add=TRUE)
-
-
-curve(dnorm(x,3.3, sqrt(11)), from=c(-50,0), to=c(1000,0.2))
-curve(dnorm(x,80, sqrt(5436)), from=c(-5,0), to=c(1000,0.2), add=TRUE)
-
-
-
-plot(data$`ELISA.S/P`, data$FPA.titer.DeltamP)
-
 
 
 
